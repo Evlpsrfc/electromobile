@@ -13,7 +13,7 @@
 
 ## 功能介绍
 
-校园局域网用户访问 [http://10.20.7.127:5000](http://10.20.7.127:5000)，外网用户访问 [http://sudacharge.haoxiaoren.com/](http://sudacharge.haoxiaoren.com/)，即可查询天赐庄校区、独墅湖校区、阳澄湖校区的充电设备使用情况，包括待机、充电中、已损坏。同时，为了方便二次开发，开放接口 [http://10.20.7.127:5000/pos/getDeviceStatus](http://10.20.7.127:5000/pos/getDeviceStatus)，通过 POST 包含 `deviceNum` 和 `cdpNum` 负载的请求，即可查询到后台的原始数据。具体格式见[main.py#L120-L135](https://github.com/Evlpsrfc/electromobile/main.py#L120-L135)。
+校园局域网用户访问 [http://10.20.7.127:5000](http://10.20.7.127:5000)，外网用户访问 [http://sudacharge.haoxiaoren.com/](http://sudacharge.haoxiaoren.com/)，即可查询天赐庄校区、独墅湖校区、阳澄湖校区的充电设备使用情况，包括待机、充电中、已损坏。同时，为了方便二次开发，开放接口 [http://10.20.7.127:5000/pos/getDeviceStatus](http://10.20.7.127:5000/pos/getDeviceStatus)，通过 POST 包含 `deviceNum` 和 `cdpNum` 负载的请求，即可查询到后台的原始数据。具体格式见[main.py#L120-L135](https://github.com/Evlpsrfc/electromobile/blob/main/main.py#L120-L135)。
 
 ## 实现细节
 
@@ -34,7 +34,7 @@ sfzx: 布尔型，表示管理该插座的充电主机是否在线
 xqbh: 小区编号，永远为 "SZDX"，苏州大学
 zjgxsj: 格式为"YYYY-MM-DD hh:mm:ss"的字符串，表示该插座最后一次和后台通讯的时间，即“最近更新时间”
 ```
-为了更人性化地向用户展示信息，还需要对以上数据做一定的处理，例如按照可用充电插座的数量进行排序、将充电棚编号和POS机编号重命名为对人类友好的别称、利用现有信息筛选已损坏的插座等等。其中筛选损坏插座的方法目前还停留在半自动的状态，通过后台查询功率变化的接口筛选掉那些后台不含有充电记录或充电时间短于五分钟但又显示在线的插座。每隔一段时间重新筛选一次，并保存在 `broken_sockets.json` 文件中（该文件的使用方法见[main.py#L152](https://github.com/Evlpsrfc/electromobile/main.py#L152)）。
+为了更人性化地向用户展示信息，还需要对以上数据做一定的处理，例如按照可用充电插座的数量进行排序、将充电棚编号和POS机编号重命名为对人类友好的别称、利用现有信息筛选已损坏的插座等等。其中筛选损坏插座的方法目前还停留在半自动的状态，通过后台查询功率变化的接口筛选掉那些后台不含有充电记录或充电时间短于五分钟但又显示在线的插座。每隔一段时间重新筛选一次，并保存在 `broken_sockets.json` 文件中（该文件的使用方法见[main.py#L152](https://github.com/Evlpsrfc/electromobile/blob/main/main.py#L152)）。
 
 ## 鸣谢
 
