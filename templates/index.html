@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>苏大充电助手</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .standby {
+      background-color: #1dad1f;
+      color: white;
+    }
+
+    .charging {
+      background-color: #e34842;
+      color: white;
+    }
+
+    .offline {
+      background-color: #808080;
+      color: white;
+    }
+
+    .posonline {
+      color: #1dad1f;
+      border: thin solid;
+    }
+  </style>
+</head>
+
+<body style="background-color: #f6f6f6;">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+  <div class="container min-vh-100 d-flex flex-column">
+    <div class="row row-cols-3 my-1">
+      {% for status_id, status_name in [["standby", "待机"], ["charging", "充电中"], ["offline", "已损坏"]] %}
+      <div class="col">
+        <div class="py-2 py-md-4 rounded border text-center fs-5 {{ status_id }}">{{ status_name }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="accordion flex-fill" id="accordionSheds" style="width: 100%;">
+      {% for shed in data %}
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed fs-5" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ shed.id }}">
+            {{ shed.name }} ({{ shed.num_standby }}/{{ shed.num_unbroken }})
+          </button>
+        </h2>
+        <div id="collapse{{ shed.id }}" class="accordion-collapse collapse" data-bs-parent="#accordionSheds">
+          {% for host in shed.hosts %}
+          <div class="py-2 py-md-4 rounded text-center mx-auto my-2 w-75 fs-5 posonline">
+            {{ host.name }}
+          </div>
+          <div class="row row-cols-5 g-0">
+            {% for socket in host.sockets %}
+            <div class="col">
+              <div class="py-1 py-md-3 rounded border text-center fs-5 {{ ['standby', 'charging', 'full', 'offline'][socket.status] }}">
+                {{ socket.id }}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <footer class="pt-2 mt-2 w-100">
+      <ul class="nav justify-content-center border-bottom pb-2 mb-2">
+        {% for region_id, region_name in [["TCZ", "天赐庄"], ["DSH", "独墅湖"], ["YCH", "阳澄湖"]] %}
+        <li class="nav-item">
+          <a href="/?region={{ region_id }}" class="nav-link px-2 text-muted {{ 'fw-bold' if region == region_id else 'fw-normal' }}">
+            {{ region_name }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class=" text-center text-muted">2022 &copy; 苏州大学计算机学院学生科协</p>
+    </footer>
+  </div>
+</body>
+
+</html>
